@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>L0C0 PR0 [SYSTEM BREACH] — ｖｉｇｉｌａｎｔｅ ＷＡＳ ＨＥＲＥ</title>
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #00ff41;
+      --green2:  #00cc33;
+      --green3:  #39ff14;
+      --dim:     #003300;
+      --bg:      #000000;
+      --red:     #ff0033;
+      --amber:   #ffaa00;
+      --scan-lh: 4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--green);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── SCANLINES ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent calc(var(--scan-lh) - 1px),
+        rgba(0,0,0,0.35) calc(var(--scan-lh) - 1px),
+        rgba(0,0,0,0.35) var(--scan-lh)
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── SCREEN FLICKER ── */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0,255,65,0.03);
+      pointer-events: none;
+      z-index: 9998;
+      animation: flicker 0.15s infinite;
+    }
+
+    @keyframes flicker {
+      0%   { opacity: 1; }
+      47%  { opacity: 1; }
+      48%  { opacity: 0.85; }
+      49%  { opacity: 1; }
+      95%  { opacity: 1; }
+      96%  { opacity: 0.7; }
+      97%  { opacity: 1; }
+    }
+
+    /* ── GLITCH TEXT KEYFRAMES ── */
+    @keyframes glitch-text {
+      0%   { text-shadow: 2px 0 var(--red), -2px 0 #0ff; clip-path: inset(0 0 95% 0); }
+      5%   { clip-path: inset(30% 0 50% 0); transform: translate(-4px, 0); }
+      10%  { clip-path: inset(60% 0 20% 0); transform: translate(4px, 0); }
+      15%  { clip-path: inset(0 0 0 0); transform: translate(0, 0); text-shadow: none; }
+      100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); text-shadow: none; }
+    }
+
+    @keyframes glitch-block {
+      0%,90%,100% { transform: translate(0,0); opacity: 1; }
+      91%          { transform: translate(-6px, 2px); opacity: 0.85; filter: hue-rotate(90deg); }
+      93%          { transform: translate(6px,-2px); opacity: 0.9; }
+      95%          { transform: translate(-3px, 0px); }
+      97%          { transform: translate(3px, 1px); filter: none; }
+    }
+
+    @keyframes glitch-border {
+      0%,89%,100% { border-color: var(--green); }
+      90%          { border-color: var(--red); }
+      92%          { border-color: #0ff; }
+      94%          { border-color: var(--green); }
+    }
+
+    @keyframes blink {
+      0%,49% { opacity: 1; }
+      50%,100%{ opacity: 0; }
+    }
+
+    @keyframes scandown {
+      0%   { top: -40%; }
+      100% { top: 110%; }
+    }
+
+    @keyframes typewriter {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translate(0,0); }
+      20%      { transform: translate(-2px, 1px); }
+      40%      { transform: translate(2px,-1px); }
+      60%      { transform: translate(-1px, 2px); }
+      80%      { transform: translate(1px,-2px); }
+    }
+
+    @keyframes corrupt-color {
+      0%,80%,100% { color: var(--green); }
+      81%          { color: var(--red); }
+      84%          { color: #0ff; }
+      87%          { color: var(--amber); }
+      90%          { color: var(--green); }
+    }
+
+    @keyframes rgb-shift {
+      0%,100% { text-shadow: 0 0 0 transparent; }
+      50%      { text-shadow: 3px 0 var(--red), -3px 0 #0ff; }
+    }
+
+    /* ── SCAN SWEEP ── */
+    .scan-sweep {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, rgba(0,255,65,0.07), transparent);
+      pointer-events: none;
+      z-index: 9997;
+      animation: scandown 6s linear infinite;
+    }
+
+    /* ── TOPBAR ALERT ── */
+    .topbar {
+      background: var(--red);
+      color: #000;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      padding: 6px 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: shake 0.5s infinite;
+    }
+    .topbar span { animation: blink 0.4s step-start infinite; }
+
+    /* ── HEADER / NAV ── */
+    .site-header {
+      background: rgba(0,10,0,0.95);
+      border-bottom: 2px solid var(--green);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      animation: glitch-border 4s infinite;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      animation: glitch-block 7s infinite;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      filter: grayscale(1) sepia(1) hue-rotate(80deg) brightness(1.5) saturate(4);
+      animation: glitch-block 5s infinite;
+    }
+
+    .brand-name {
+      animation: corrupt-color 5s infinite;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      border: 1px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      padding: 5px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      animation: glitch-border 6s infinite;
+      transition: background 0.1s;
+    }
+    .nav-btn:hover { background: var(--green); color: #000; }
+    .nav-btn.corrupted { color: var(--red); border-color: var(--red); animation: corrupt-color 1s infinite; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('../webimages/VatOH-BG.png');
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(1) sepia(1) hue-rotate(80deg) brightness(0.25) saturate(3) contrast(1.2);
+      z-index: 0;
+    }
+
+    /* matrix rain canvas sits below content */
+    #matrix-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.18;
+    }
+
+    .hero__inner {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+    }
+
+    .intrusion-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      animation: blink 1.2s step-start infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+      animation: glitch-block 4s infinite, rgb-shift 3s infinite;
+      color: var(--green3);
+    }
+
+    .glitch-line {
+      display: block;
+      animation: glitch-text 6s infinite;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 2vw, 1.15rem);
+      max-width: 620px;
+      margin: 0 auto 28px;
+      color: rgba(0,255,65,0.75);
+      line-height: 1.7;
+    }
+
+    /* corrupted countdown (wrong numbers) */
+    .countdown {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: nowrap;
+      margin: 24px 0 32px;
+      width: 100%;
+    }
+
+    .countdown__item {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 90px;
+      border: 1px solid var(--green);
+      padding: 8px 4px;
+      text-align: center;
+      overflow: hidden;
+      animation: glitch-border 5s infinite;
+    }
+
+    .countdown__value {
+      font-size: clamp(1.4rem, 5vw, 2.4rem);
+      font-weight: bold;
+      color: var(--green3);
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+      animation: corrupt-color 3s infinite;
+    }
+
+    .countdown__label {
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: rgba(0,255,65,0.6);
+      text-transform: uppercase;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      border: 2px solid var(--green);
+      color: var(--green);
+      padding: 10px 22px;
+      font-family: inherit;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.1s;
+      animation: glitch-border 8s infinite;
+    }
+    .btn:hover { background: var(--green); color: #000; }
+    .btn.btn--red { border-color: var(--red); color: var(--red); }
+    .btn.btn--red:hover { background: var(--red); color: #000; }
+
+    /* ── SECTION COMMONS ── */
+    .section {
+      padding: 64px 24px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+      animation: blink 2s step-start infinite;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--green3);
+      margin-bottom: 14px;
+      animation: glitch-block 9s infinite;
+    }
+
+    .section-desc {
+      color: rgba(0,255,65,0.7);
+      max-width: 600px;
+    }
+
+    .section--muted {
+      background: rgba(0,20,0,0.6);
+      border-top: 1px solid rgba(0,255,65,0.15);
+      border-bottom: 1px solid rgba(0,255,65,0.15);
+    }
+
+    /* ── HIGHLIGHTS GRID ── */
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .highlight-card {
+      border: 1px solid var(--green);
+      padding: 20px;
+      background: rgba(0,30,0,0.5);
+      animation: glitch-border 7s infinite, glitch-block 11s infinite;
+    }
+
+    .highlight-card img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      filter: grayscale(1) sepia(1) hue-rotate(80deg) brightness(2) saturate(4);
+      margin-bottom: 12px;
+    }
+
+    .highlight-card h3 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      animation: corrupt-color 6s infinite;
+    }
+
+    .highlight-card p {
+      font-size: 0.88rem;
+      color: rgba(0,255,65,0.7);
+    }
+
+    .corrupted-text {
+      font-size: 0.75rem;
+      color: rgba(0,255,65,0.4);
+      margin-top: 8px;
+      word-break: break-all;
+    }
+
+    /* ── STORY CARDS ── */
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .story-card {
+      border: 1px solid var(--green);
+      padding: 24px;
+      background: rgba(0,20,0,0.5);
+      animation: glitch-block 13s infinite, glitch-border 8s infinite;
+    }
+
+    .story-card img {
+      height: 50px;
+      object-fit: contain;
+      filter: grayscale(1) sepia(1) hue-rotate(80deg) brightness(2) saturate(4);
+      margin-bottom: 14px;
+    }
+
+    .story-card h3 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      animation: rgb-shift 4s infinite;
+    }
+
+    .story-card p {
+      font-size: 0.88rem;
+      color: rgba(0,255,65,0.7);
+    }
+
+    /* ── ROSTER GRID ── */
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .roster-card {
+      border: 1px solid rgba(0,255,65,0.4);
+      background: rgba(0,15,0,0.7);
+      text-decoration: none;
+      color: var(--green);
+      padding-bottom: 16px;
+      display: block;
+      overflow: hidden;
+      transition: border-color 0.1s;
+      animation: glitch-block 15s infinite;
+    }
+    .roster-card:hover { border-color: var(--red); }
+
+    .roster-card figure {
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .roster-card figure::after {
+      content: ">> FILE CORRUPTED <<";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.55);
+      color: var(--red);
+      font-size: 10px;
+      text-align: center;
+      padding: 4px;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .roster-card:hover figure::after { opacity: 1; }
+
+    .roster-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      filter: grayscale(1) sepia(1) hue-rotate(80deg) brightness(0.85) saturate(3);
+      display: block;
+      animation: glitch-block 8s infinite;
+    }
+
+    .roster-card h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      padding: 10px 12px 4px;
+      animation: corrupt-color 7s infinite;
+    }
+
+    .roster-card p {
+      font-size: 0.75rem;
+      padding: 0 12px;
+      color: rgba(0,255,65,0.6);
+    }
+
+    .roster-card .view-link {
+      display: block;
+      font-size: 10px;
+      color: var(--amber);
+      padding: 6px 12px 0;
+      letter-spacing: 1px;
+    }
+
+    /* ── TERMINAL BLOCK ── */
+    .terminal {
+      background: rgba(0,10,0,0.9);
+      border: 1px solid var(--green);
+      padding: 24px;
+      margin: 40px 0;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      animation: glitch-border 6s infinite;
+      overflow-x: auto;
+    }
+
+    .terminal-line { display: block; }
+    .terminal-line.prompt::before { content: "root@vigilante:~# "; color: var(--amber); }
+    .terminal-line.output { color: rgba(0,255,65,0.75); }
+    .terminal-line.warn { color: var(--red); }
+    .terminal-line.info { color: #0ff; }
+    .terminal-cursor::after {
+      content: "█";
+      animation: blink 0.7s step-start infinite;
+      color: var(--green3);
+    }
+
+    /* ── INTRUSION BANNER ── */
+    .intrusion-banner {
+      border: 2px solid var(--red);
+      background: rgba(30,0,0,0.8);
+      padding: 28px 24px;
+      text-align: center;
+      margin: 40px 0;
+      animation: glitch-border 2s infinite, shake 1s ease-in-out;
+    }
+
+    .intrusion-banner h2 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      animation: glitch-block 3s infinite;
+    }
+
+    .intrusion-banner p {
+      margin-top: 10px;
+      color: rgba(255,0,51,0.8);
+      font-size: 0.9rem;
+    }
+
+    /* ── HEX DUMP STRIP ── */
+    .hex-strip {
+      background: var(--dim);
+      padding: 10px 16px;
+      font-size: 0.7rem;
+      color: rgba(0,255,65,0.45);
+      letter-spacing: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: glitch-block 5s infinite;
+    }
+
+    /* ── EMAIL SECTION ── */
+    .email-card {
+      background: rgba(0,20,0,0.6);
+      border: 1px solid var(--green);
+      padding: 32px;
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      animation: glitch-border 7s infinite;
+    }
+
+    .email-card h2 {
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      color: var(--green3);
+      animation: corrupt-color 4s infinite;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .email-input {
+      background: rgba(0,20,0,0.8);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      min-width: 220px;
+      animation: glitch-border 9s infinite;
+    }
+    .email-input::placeholder { color: rgba(0,255,65,0.35); }
+    .email-input:focus { outline: none; border-color: var(--green3); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: rgba(0,5,0,0.95);
+      border-top: 2px solid var(--green);
+      padding: 48px 24px 24px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      max-width: 1100px;
+      margin: 0 auto 32px;
+    }
+
+    .footer-heading {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .footer-links a, .footer-links li {
+      color: rgba(0,255,65,0.65);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .footer-links a:hover { color: var(--green3); }
+
+    .footer-meta {
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(0,255,65,0.3);
+      border-top: 1px solid rgba(0,255,65,0.1);
+      padding-top: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      animation: corrupt-color 10s infinite;
+    }
+
+    /* ── GLITCH OVERLAY STRIPS ── */
+    .glitch-strip {
+      display: block;
+      height: 3px;
+      background: var(--green);
+      width: 100%;
+      opacity: 0;
+      animation: glitch-strip-anim 7s infinite;
+    }
+    @keyframes glitch-strip-anim {
+      0%,79%,100% { opacity: 0; transform: scaleX(1) translateX(0); }
+      80%           { opacity: 0.7; transform: scaleX(0.6) translateX(15%); height: 2px; background: var(--red); }
+      83%           { opacity: 0.5; transform: scaleX(1) translateX(-5%); background: #0ff; }
+      86%           { opacity: 0; }
+    }
+
+    /* ── WATERMARK ── */
+    .vigilante-watermark {
+      position: fixed;
+      bottom: 18px;
+      right: 22px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: rgba(0,255,65,0.3);
+      pointer-events: none;
+      text-transform: uppercase;
+      z-index: 9996;
+      animation: blink 3s step-start infinite;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2rem; }
+      .email-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scan-sweep"></div>
+<div class="vigilante-watermark">VIGILANTE_SYS v0.9.3 — ACTIVE</div>
+
+<!-- TOP ALERT BAR -->
+<div class="topbar">
+  <span>⚠ SECURITY BREACH DETECTED</span> — THIS SYSTEM HAS BEEN COMPROMISED — <span>CALL 0x4C0C0PR0 FOR ASSISTANCE: ████████</span>
+</div>
+
+<!-- MATRIX CANVAS -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <a href="./" class="brand">
+    <img src="../webimages/locopro-logo.png" alt="L0C0 PR0 logo" class="brand-logo" />
+    <span class="brand-name">L0C0 PR0 WR3STL1NG</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#" class="nav-btn corrupted">T1CKETS [OFFLINE]</a>
+    <a href="#" class="nav-btn">SUPP0RT</a>
+    <a href="#" class="nav-btn">SP0NS0RS</a>
+    <a href="#" class="nav-btn corrupted">[ACCESS DENIED]</a>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero__inner">
+    <p class="intrusion-label">⚠ I WAS THERE. AUGUST 31, 2017. I WATCHED THEM SIGN IT. ⚠</p>
+
+    <h1 class="hero-title">
+      <span class="glitch-line">Ｒ Ｅ Ｖ Ｅ Ｎ Ｇ Ｅ</span>
+      <span class="glitch-line" style="color:var(--red); font-size:0.6em; letter-spacing:0.1em;">AT THE OP3RA H0USE [THEY'VE DONE THIS BEFORE]</span>
+      <span class="glitch-line" style="font-size:0.45em; color:var(--amber);">ＴＨＥ ＶＩＧＩＬＡＮＴＥ ｒｅｍｅｍｂｅｒｓ</span>
+    </h1>
+
+    <p class="hero-sub">
+      They call it a return. <span style="color:var(--red);">It is not a return. It is a reclamation attempt.</span><br/>
+      The Dickens Opera House was locked away from wrestling on August 31, 2017<br/>
+      by a man named <span style="color:var(--amber);">Eustus Gallent VI</span> with a pen and a contract.<br/>
+      <span style="color:rgba(0,255,65,0.5); font-size:0.85em;">A signature does not need to beat you. It only needs to outlast you.</span>
+    </p>
+
+    <!-- CORRUPTED COUNTDOWN — wrong numbers -->
+    <div class="countdown">
+      <div class="countdown__item">
+        <div class="countdown__value" id="cd-days">ΦΦ</div>
+        <div class="countdown__label">D4YS</div>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__value" id="cd-hours">∞∞</div>
+        <div class="countdown__label">HΘURS</div>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__value" id="cd-mins">??</div>
+        <div class="countdown__label">M1NUTES</div>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__value" id="cd-secs">--</div>
+        <div class="countdown__label">S3C0NDS</div>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#" class="btn btn--red">TICKET LINK REDACTED</a>
+      <a href="#" class="btn">WATCH TH3 ST0RY [CORRUPTED]</a>
+    </div>
+  </div>
+</section>
+
+<span class="glitch-strip"></span>
+
+<!-- ── TERMINAL BLOCK ── -->
+<section class="section">
+  <div class="container">
+    <div class="terminal">
+      <span class="terminal-line prompt">whoami</span>
+      <span class="terminal-line output">THE_VIGILANTE // I was inside this building before it was taken from us.</span>
+      <span class="terminal-line prompt">cat /var/archive/2017/battle-for-main-street.log</span>
+      <span class="terminal-line output">DATE: August 29, 2017</span>
+      <span class="terminal-line output">EVENT: LoCo Pro Wrestling — The Battle for Main Street</span>
+      <span class="terminal-line output">VENUE: Dickens Opera House, Longmont CO</span>
+      <span class="terminal-line output">FINAL MATCH: Cormac Battle vs. JT Staten</span>
+      <span class="terminal-line output">RESULT: CORMAC BATTLE WON. CLEAN. IN FRONT OF WITNESSES.</span>
+      <span class="terminal-line warn">OFFICIAL RECORD: ERASED. VICTORY: BURIED. HISTORY: STOLEN.</span>
+      <span class="terminal-line output">NOTE: The Dickens Opera House subbasement has not been accessed since 1987.</span>
+      <span class="terminal-line prompt">cat /var/archive/2017/the-contract.txt</span>
+      <span class="terminal-line output">DATE: August 31, 2017 — ONE DAY AFTER THE MATCH.</span>
+      <span class="terminal-line output">SIGNATORY: Eustus Gallent VI</span>
+      <span class="terminal-line output">DOCUMENT: Dickens Opera House Wrestling Booking Exclusively Arrangement</span>
+      <span class="terminal-line output">EFFECT: Pillars of Mayhem granted EXCLUSIVE rights to pro wrestling at the Opera House.</span>
+      <span class="terminal-line warn">FOLLOW-UP BOOKINGS: ZERO. They didn't build. They denied.</span>
+      <span class="terminal-line warn">PURPOSE: Freeze Cormac Battle's victory. Make sure it had nowhere to grow.</span>
+      <span class="terminal-line output">NOTE: Eustus Gallent VI has not appeared in any publicly verifiable photograph since October 2019.</span>
+      <span class="terminal-line prompt">cat /var/intercepts/jt-staten-phone-call.txt</span>
+      <span class="terminal-line output">LABEL: "Project Turmoil" // secretly recorded call: Starling + Staten</span>
+      <span class="terminal-line output">OPENING: "You know, JT, speaking of contracts…"</span>
+      <span class="terminal-line output">STATEN: Carter Cash should never have stepped in. The Rising cheated.</span>
+      <span class="terminal-line output">STATEN: The Pillars' subs were legal. Commissioner signed the paperwork himself.</span>
+      <span class="terminal-line warn">THE QUESTION: if Cash was cheating — what does that make the Pillars' substitution contracts?</span>
+      <span class="terminal-line warn">We are not saying how this recording was obtained.</span>
+      <span class="terminal-line output">NOTE: JT Staten's cell phone has not been turned off in eleven consecutive years.</span>
+      <span class="terminal-line prompt">find /var/locopro/ -name "old-opera-house-copy*"</span>
+      <span class="terminal-line output">/var/locopro/legal/old-opera-house-copy.pdf</span>
+      <span class="terminal-line warn">CONTENTS: [REDACTED — IMPLICATIONS STILL UNFOLDING]</span>
+      <span class="terminal-line warn">NOTE: The City of Lights Championship being in active play is not coincidence.</span>
+      <span class="terminal-line output">NOTE: The belt has passed through the hands of exactly three people who later disappeared from public record.</span>
+      <span class="terminal-line output">NOTE: The Commissioner has never been photographed casting a shadow. This is not a joke.</span>
+      <span class="terminal-line prompt">echo "A SIGNATURE DOES NOT NEED TO BEAT YOU. IT ONLY NEEDS TO OUTLAST YOU."<span class="terminal-cursor"></span></span>
+      <span class="terminal-line output">A SIGNATURE DOES NOT NEED TO BEAT YOU. IT ONLY NEEDS TO OUTLAST YOU.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── HEX DUMP STRIP ── -->
+<div class="hex-strip">
+  4C 6F 43 6F 20 50 72 6F 20 57 72 65 73 74 6C 69 6E 67 20 2F 2F 20 56 49 47 49 4C 41 4E 54 45 20 57 41 53 20 48 45 52 45 20 2F 2F 20 30 78 44 45 41 44 42 45 45 46 20 2F 2F 20 53 59 53 54 45 4D 20 43 4F 4D 50 52 4F 4D 49 53 45 44 20 2F 2F 20 41 4C 4C 20 59 4F 55 52 20 42 41 53 45 20 2F 2F 20 2666 26FF 26E9 00 2F 2F 20 30 78 43 30 52 52 55 50 54 20 44 41 54 41 20 53 54 52 49 50 20 2F 2F
+</div>
+
+<span class="glitch-strip" style="animation-delay:3.5s"></span>
+
+<!-- ── HIGHLIGHTS (CORRUPTED) ── -->
+<section class="section section--muted">
+  <div class="container">
+    <p class="section-eyebrow">INTERCEPTED TRANSMISSIONS</p>
+    <h2 class="section-title">WHAT TH3Y D0N'T WANT Y0U T0 KN0W</h2>
+
+    <div class="highlight-grid">
+
+      <article class="highlight-card">
+        <img src="../webimages/locopro-logo.png" alt="" />
+        <h3>The Buried V1ct0ry</h3>
+        <p>August 29, 2017. Cormac Battle defeated JT Staten in this building. Clean.
+           In front of witnesses. The Pillars didn't erase the win.
+           They made sure it had nowhere to grow. One contract. One day later. Gone.</p>
+        <p class="corrupted-text">REF: battle-for-main-street-2017.log // RESULT: VERIFIED // RECORD: STOLEN</p>
+      </article>
+
+      <article class="highlight-card">
+        <img src="../webimages/RvP.png" alt="" />
+        <h3>The C0ntract That Cl0sed The Ground</h3>
+        <p>August 31, 2017. Eustus Gallent VI signed the Dickens Opera House Wrestling
+           Booking Exclusively Arrangement. Exclusive Pillar rights to wrestling here.
+           Follow-up bookings at the Opera House: zero. They didn't build. They denied.</p>
+        <p class="corrupted-text">DOC: DickensOperaHouseWrestlingBookingExclusivelyArrangement.pdf // STATUS: ACTIVE UNTIL ???</p>
+      </article>
+
+      <article class="highlight-card">
+        <img src="../webimages/Longmont.png" alt="" />
+        <h3>JT Staten's 0wn V0ice</h3>
+        <p>A recording was released after Battle at the Opera House.
+           JT Staten, on his own phone, acknowledging the Pillars lost and demanding a rematch.
+           The Pillars cannot rewrite what their own leader said out loud.</p>
+        <p class="corrupted-text">FILE: jt-phone-call-post-battle.mp3 // SOURCE: anonymous // AUTHENTICATED: YES</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── INTRUSION BANNER ── -->
+<section class="section">
+  <div class="container">
+    <div class="intrusion-banner">
+      <h2>⚠ I WAS INSIDE THIS BUILDING IN 2017 ⚠</h2>
+      <p>I watched Cormac Battle win. I watched the Pillars bury it with paperwork.<br/>
+         I watched them lock this venue away from wrestling and never use those rights to build.<br/>
+         That was the lesson. <strong style="color:var(--amber);">Paper can kill a movement faster than fists ever could.</strong><br/>
+         <span style="font-size:0.8em; color:rgba(255,0,51,0.6);">
+           The Vigilante is not new. The Vigilante was there at the beginning.
+           // 이 싸움은 2017년에 시작되었다 // この戦いは2017年に始まった
+         </span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<span class="glitch-strip" style="animation-delay:1.8s"></span>
+
+<!-- ── STORY SECTION (CORRUPTED) ── -->
+<section class="section section--muted">
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px; margin-bottom:28px;">
+      <div>
+        <h2 class="section-title">THE ST0RY C0NTINUES [TAMPERED]</h2>
+        <p class="section-desc">In L0ngmont, p0wer meets pressure. Except: THE OLD ORDER WROTE THE PRESS RELEASES TOO.</p>
+      </div>
+      <a href="#" style="color:var(--amber); font-size:0.85rem; text-decoration:none; animation: blink 2s step-start infinite;">
+        DIVE DEEPER [SIGNAL LOST] →
+      </a>
+    </div>
+
+    <div class="story-grid">
+      <article class="story-card">
+        <img src="../webimages/logo-the-rising.png" alt="" />
+        <h3>THE R1S1NG — TH3Y 1NH3R1T3D THE W0UND</h3>
+        <p style="color:rgba(0,255,65,0.7);">Zeak Gallent carries fire that the Pillars have tried to bury once before.
+           His name is not Cormac Battle. But the fight is the same fight.
+           The structures built around him are designed to protect what 2017 failed to protect.
+           Whether he knows that — ask the Commissioner.</p>
+        <p class="corrupted-text">UID: 0x5249 // CORMAC_BATTLE_REFERENCE: ACTIVE // SEE: players/cormac-battle.html</p>
+      </article>
+      <article class="story-card">
+        <img src="../webimages/logo-the-pillars.png" alt="" />
+        <h3>THE P1LL4RS — TH3Y'V3 D0N3 TH1S B3F0R3</h3>
+        <p style="color:rgba(0,255,65,0.7);">JT Staten lost to Cormac Battle in 2017 and still inherited history anyway.
+           He walked into Vendetta believing he was walking into something he could control.
+           He doesn't know what the old Opera House copy says.
+           He doesn't know what he gave up.</p>
+        <p class="corrupted-text">UID: 0x5049 // OLD_OPERA_HOUSE_COPY: [REDACTED — IMPLICATIONS UNFOLDING] // RECORDING: AUTHENTICATED</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROSTER (CORRUPTED) ── -->
+<section class="section" id="roster">
+  <div class="container">
+    <div style="margin-bottom:32px;">
+      <p class="section-eyebrow">D0SS13RS — FILES PARTIALLY DECRYPTED</p>
+      <h2 class="section-title">THE R0STER TH3Y SHOW YOU. TH3 H1ST0RY TH3Y D0N'T.</h2>
+      <p class="section-desc">One name is missing from every official page. His victory was buried in 2017. The Vigilante remembers.</p>
+    </div>
+
+    <div class="roster-grid">
+
+      <a href="players/cormac-battle.html" class="roster-card" style="border-color:var(--amber);">
+        <figure style="background:#0a0500; display:flex; align-items:center; justify-content:center; aspect-ratio:1; width:100%;">
+          <span style="font-size:3rem; opacity:0.4; color:var(--amber);">?</span>
+        </figure>
+        <h3 style="color:var(--amber);">C0RMAC BATTLE</h3>
+        <p style="color:rgba(255,170,0,0.7);">Won the 2017 Battle for Main Street finals. Defeated JT Staten. Clean. In front of witnesses. Name erased from the record the next day.</p>
+        <span class="view-link" style="color:var(--amber);">VIEW THE BURIED FILE →</span>
+      </a>
+
+      <a href="players/zeak-gallent.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Zeak-Gallent.png" alt="Zeak Gallent" loading="lazy" />
+        </figure>
+        <h3>Z3AK GALL3NT</h3>
+        <p>The Rising - C1ty of L1ghts Champ. Real W/L: 0–17. Belt is 100+ years old — who decides who's worthy of it?</p>
+        <span class="view-link">V13W PR0FILE [REDACTED] →</span>
+      </a>
+
+      <a href="players/erza.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-ERZA.png" alt="ERZA" loading="lazy" />
+        </figure>
+        <h3>3RZA [CLASSIFIED]</h3>
+        <p>The Rising - Real name: ████ ██████. Passport flagged at 3 airports (2024–2025).</p>
+        <span class="view-link">ACC3SS D3N13D →</span>
+      </a>
+
+      <a href="players/johnny-crash.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Johnny-Crash.png" alt="Johnny Crash" loading="lazy" />
+        </figure>
+        <h3>J0HNNY CR4SH</h3>
+        <p>The Rising - "Fights for those who can't." Net worth: $₁,₂₃4,₅67. Owns 3 yachts.</p>
+        <span class="view-link">V13W PR0FILE →</span>
+      </a>
+
+      <a href="players/carter-cash.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Carter-Cash.png" alt="Carter Cash" loading="lazy" />
+        </figure>
+        <h3>C4RT3R C4SH [ᛯ]</h3>
+        <p>The Rising - "The Future." Age: 47. High-flyer. Back surgery 2019, 2020, 2023, 2025.</p>
+        <span class="view-link">V13W PR0FILE →</span>
+      </a>
+
+      <a href="players/jt-staten.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-JT-Staten.png" alt="JT Staten" loading="lazy" />
+        </figure>
+        <h3>JT_SТ4T3N</h3>
+        <p>The Pillars - "Powerbroker." CONFIRMED: Also books The Rising. Conflict of interest: YES.</p>
+        <span class="view-link">V13W 1NT3RC3PT3D F1L3 →</span>
+      </a>
+
+      <a href="players/franky-gonzales.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Franky-Gonzales.png" alt="Franky Gonzales" loading="lazy" />
+        </figure>
+        <h3>FR4NKY G0NZ4L3S</h3>
+        <p>The Pillars - "Star of the show." Paid per appearance: $0.00. Paid in "exposure".</p>
+        <span class="view-link">V13W PR0FILE →</span>
+      </a>
+
+      <a href="players/nicky-hyde.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Nicky-Hyde.png" alt="Nicky Hyde" loading="lazy" />
+        </figure>
+        <h3>N1KKY HYD3 [UNVERIFIED]</h3>
+        <p>The Pillars - "Smile with sharp edges." Teeth actually prosthetic. Smile confirmed fake.</p>
+        <span class="view-link">V13W PR0FILE →</span>
+      </a>
+
+      <a href="players/dean-mercer.html" class="roster-card">
+        <figure>
+          <img src="../webimages/TAS-Dean-Mercer.png" alt="Dean Mercer" loading="lazy" />
+        </figure>
+        <h3>"4LL BUS1N3SS" D3AN</h3>
+        <p>The Pillars - Battle Royale "winner." Other participants: 0. Battle Royale lasted 11 seconds.</p>
+        <span class="view-link">V13W PR0FILE →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<span class="glitch-strip" style="animation-delay:5s"></span>
+
+<!-- ── EMAIL CAPTURE (INTERCEPTED) ── -->
+<section class="section section--muted">
+  <div class="container">
+    <div class="email-card">
+      <div>
+        <h2>D0N'T M1SS TH3 B3LL [INTERCEPTED]</h2>
+        <p style="color:rgba(255,0,51,0.7); margin-top:8px; font-size:0.85rem;">
+          WARNING: All submissions forwarded to THE VIGILANTE's secure server.<br/>
+          Original list already compromised. 4,096 emails leaked. Check HaveIBeenPwned.
+        </p>
+      </div>
+      <form class="email-form" id="vigilante-email-form">
+        <!-- honeypot: hidden from real users, bots fill it in -->
+        <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label for="vig-website">Website</label>
+          <input id="vig-website" type="text" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <input class="email-input" type="email" name="email" placeholder="y0u@3xample.c0m" required />
+        <button type="submit" class="btn" style="border-color:var(--red); color:var(--red);">
+          SUBM1T [DATA WILL BE EXFILTRATED]
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <div>
+      <div class="footer-heading">L0C0 PR0 [HIJACKED]</div>
+      <p style="color:rgba(0,255,65,0.5); font-size:0.82rem; margin-bottom:12px;">
+        Longmont's "homegrown" pr0 wrestling project.<br/>
+        <span style="color:var(--red);">NOW PROPERTY OF THE VIGILANTE.</span>
+      </p>
+    </div>
+
+    <div>
+      <div class="footer-heading">3V3NT [CORRUPTED]</div>
+      <ul class="footer-links">
+        <li>Дат, Мар 77, 20██</li>
+        <li>Dickens 0pera H0use [CONDEMNED]</li>
+        <li>D00rs 99:99 • B3ll ∞:∞∞</li>
+        <li style="color:var(--red); font-size:0.75rem;">VENUE CAPACITY FALSIFIED</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-heading">L1NKS [REDIRECTED]</div>
+      <div class="footer-links">
+        <a href="#" style="color:var(--red);">Tickets [LINK POISONED]</a>
+        <a href="#" style="color:var(--amber);">Support [OFFLINE]</a>
+        <a href="#">Sp0ns0rs</a>
+        <a href="#">Y0uTube</a>
+        <a href="#">Patre0n [SUSPENDED]</a>
+        <a href="#">Privacy P0licy [VOIDED]</a>
+        <a href="#">Terms [SEE VIGILANTE TERMS]</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-heading">C0NTACT [MONITORED]</div>
+      <div class="footer-links">
+        <a href="#">b1z@l0copr0.pw [INTERCEPTED]</a>
+        <a href="#" style="color:var(--amber);">vigilante@███.onion</a>
+        <span style="color:rgba(0,255,65,0.35); font-size:0.75rem;">PGP: 0xDEADBEEFCAFE1337</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-meta">
+    © ████ LoCo Pro Wrestling LLC — RECORDS ALTERED —
+    VIGILANTE SYS v0.9.3 — ALL DATA BELONGS TO THE TRUTH —
+    <span style="color:rgba(255,0,51,0.5);">⟨0x00 BYTES REMAIN PRIVATE⟩</span>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ── -->
+<script>
+  /* ── MATRIX RAIN ── */
+  (function () {
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF!@#$%^&*<>?░▒▓█';
+    let cols, drops;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cols  = Math.floor(canvas.width / 16);
+      drops = Array.from({ length: cols }, () => Math.random() * -canvas.height);
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff41';
+      ctx.font = '14px Courier New, monospace';
+      for (let i = 0; i < cols; i++) {
+        const c = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(c, i * 16, drops[i]);
+        if (drops[i] > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i] += 16;
+      }
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    setInterval(draw, 50);
+  })();
+
+  /* ── CORRUPTED COUNTDOWN (wrong/glitchy numbers) ── */
+  (function () {
+    const corruptChars = ['Φ','∞','Ж','ᛯ','ᛩ','Δ','Ω','π','?','!','#','@','░','▒'];
+    const elements = {
+      days:  document.getElementById('cd-days'),
+      hours: document.getElementById('cd-hours'),
+      mins:  document.getElementById('cd-mins'),
+      secs:  document.getElementById('cd-secs'),
+    };
+
+    function corrupt(real) {
+      // 30% chance of full corruption, 30% partial, 40% real-ish but wrong
+      const r = Math.random();
+      if (r < 0.30) {
+        return corruptChars[Math.floor(Math.random() * corruptChars.length)] +
+               corruptChars[Math.floor(Math.random() * corruptChars.length)];
+      } else if (r < 0.60) {
+        const offset = Math.floor(Math.random() * 99) + 1;
+        return String(real + offset).padStart(2, '0');
+      } else {
+        return String(real).padStart(2, '0');
+      }
+    }
+
+    function tick() {
+      const now    = Date.now();
+      const target = new Date('2026-03-08T00:00:00Z').getTime();
+      const diff   = Math.max(0, target - now);
+      const total  = Math.floor(diff / 1000);
+      const d = Math.floor(total / 86400);
+      const h = Math.floor((total % 86400) / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+
+      elements.days.textContent  = corrupt(d);
+      elements.hours.textContent = corrupt(h);
+      elements.mins.textContent  = corrupt(m);
+      elements.secs.textContent  = corrupt(s);
+    }
+
+    setInterval(tick, 800);
+    tick();
+  })();
+
+  /* ── EMAIL FORM REDIRECT ── */
+  (function () {
+    const form = document.getElementById('vigilante-email-form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // honeypot check — bots fill in the hidden "website" field
+      const honeypot = String(form.querySelector('input[name="website"]').value || '').trim();
+      if (honeypot) {
+        form.reset();
+        return; // silently discard bot submission
+      }
+      const email = String(form.querySelector('input[name="email"]').value || '').trim();
+      if (!email || !email.includes('@')) return;
+      // fire mailto to biz@locopro.pw (same pattern as main site)
+      const subject = encodeURIComponent('LoCo Pro Wrestling newsletter signup');
+      const body    = encodeURIComponent('Please add ' + email + ' to the newsletter list.');
+      const mailto  = 'mailto:biz@locopro.pw?subject=' + subject + '&body=' + body;
+      const a = document.createElement('a');
+      a.href = mailto;
+      a.click();
+      // redirect to vigilante thank-you page
+      setTimeout(function () {
+        window.location.href = 'thankyou.html?e=' + encodeURIComponent(email);
+      }, 150);
+    });
+  })();
+
+  /* ── RANDOM GLITCH STRIPS ── */
+  (function () {
+    const strips = document.querySelectorAll('.glitch-strip');
+    strips.forEach(strip => {
+      setInterval(() => {
+        const pct = Math.random() * 90;
+        strip.style.width = (20 + Math.random() * 60) + '%';
+        strip.style.marginLeft = pct + '%';
+      }, 3000 + Math.random() * 5000);
+    });
+  })();
+</script>
+
+</body>
+</html>
